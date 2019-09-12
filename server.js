@@ -58,31 +58,32 @@ app.post('/api/upload/single', upload.single('singleFile'), (req, res, next) => 
         tags: 'vue_trans'
       })
       .then(function (photo) {
-        console.log('** photo saved');
+        console.log('** file saved');
+        return photo;
       })
-      .finally(function () {
+      .then(function (photo) {
+        //delete from file system
         res.status(200).json({
+          "photo_url":photo.secure_url,
           "status": "success",
           "code": "200",
           "message": "file uploaded successfully"
+        })
+      })
+      .catch(err => {
+        console.log(err.message);
+        res.status(200).json({
+          "status": "upload to cloudinary",
+          "code": "500",
+          "message": err.message
         });
-      });
-
-    // call uploader
-    // if that works return the photo object
-    // front end can pull the values out
-
-    // res.status(200).json({
-    //   "status": "success",
-    //   "code": "200",
-    //   "message": "file uploaded successfully"
-    // });
+      })
   } catch (err) {
     console.log(err.message);
     res.status(200).json({
-      "status": "failed",
+      "status": "save to server failed",
       "code": "500",
-      "message": error.message
+      "message": err.message
     });
   }
 });

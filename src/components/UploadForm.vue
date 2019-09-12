@@ -1,30 +1,21 @@
 <template>
   <div class="upload">
-    <form v-on:submit.prevent="upload" enctype="multipart/form-data">
-      <div>
-        <label name="file">Select image to upload:</label>
-        <input type="file" name="file" id="file" accept="image/*" />
-      </div>
-      <div>
-        <input type="submit" value="Upload Image" name="submit" />
-      </div>
-    </form>
+   
 
     <div class="container">
       <!--UPLOAD-->
-      <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+      <form enctype="multipart/form-data" novalidate v-if="isInitial">
         <h1>Upload images</h1>
         <div class="dropbox">
           <input
             type="file"
-            
             :name="uploadFieldName"
             :disabled="isSaving"
             @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
             accept="image/*"
             class="input-file"
           />
-          <p v-if="isInitial || isSuccess">
+          <p v-if="isInitial">
             Drag your file(s) here to begin
             <br />or click to browse
           </p>
@@ -32,27 +23,16 @@
         </div>
       </form>
     </div>
-    {{result}}
+    <div v-if="result && result.photo_url">
+      <img :src="result.photo_url" alt="uploaded photo" />
+    </div>
+    <div>{{result}}</div>
   </div>
 </template>
 
 <script>
 import * as axios from "axios";
 
-// function upload(formData) {
-// const url = `${BASE_URL}/photos/upload`;
-// const url = `/api/upload/single`;
-// return axios.post(url, formData)
-//     // get data
-//     .then(x => {
-//       x.data
-//     })
-// add url field
-// .then(x => x.map(img => Object.assign({},
-//     img, { url: `${BASE_URL}/images/${img.id}` })));
-// }
-
-// import { upload } from "./file-upload.service";
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
   STATUS_SUCCESS = 2,
@@ -63,7 +43,6 @@ export default {
   data() {
     return {
       result: null,
-      uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
       uploadFieldName: "singleFile"
@@ -87,7 +66,7 @@ export default {
     reset() {
       // reset form to initial state
       this.currentStatus = STATUS_INITIAL;
-      this.uploadedFiles = [];
+      // this.uploadedFiles = [];
       this.uploadError = null;
     },
     save(formData) {
@@ -99,14 +78,10 @@ export default {
       // return (
       axios
         .post(url, formData)
-        // get data
-        // .then(x => {
-        //   let obj = x.data;
-        // })
         .then(response => {
           this.result = response.data;
-          this.uploadedFiles = [].concat(x);
           this.currentStatus = STATUS_SUCCESS;
+          this.reset()
         })
         .catch(err => {
           this.uploadError = err.response;
@@ -133,6 +108,13 @@ export default {
     this.reset();
   }
 };
+/*
+img.split("/")
+let xform = "c_thumb,w_200,g_face"
+let xform = "e_improve,w_300,h_600,c_thumb,g_auto"
+arr.splice(6,0,xform)
+arr.join("/")
+*/
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
