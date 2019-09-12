@@ -1,7 +1,5 @@
 <template>
   <div class="upload">
-   
-
     <div class="container">
       <!--UPLOAD-->
       <form enctype="multipart/form-data" novalidate v-if="isInitial">
@@ -23,8 +21,8 @@
         </div>
       </form>
     </div>
-    <div v-if="result && result.photo_url">
-      <img :src="result.photo_url" alt="uploaded photo" />
+    <div v-if="uploadedUrl">
+      <img :src="uploadedUrl" alt="uploaded photo" />
     </div>
     <div>{{result}}</div>
   </div>
@@ -43,6 +41,7 @@ export default {
   data() {
     return {
       result: null,
+      uploadedUrl: null,
       uploadError: null,
       currentStatus: null,
       uploadFieldName: "singleFile"
@@ -69,24 +68,48 @@ export default {
       // this.uploadedFiles = [];
       this.uploadError = null;
     },
-    save(formData) {
+    async save(formData) {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
 
       // upload(formData)
       const url = `/api/upload/single`;
-      // return (
-      axios
-        .post(url, formData)
-        .then(response => {
-          this.result = response.data;
-          this.currentStatus = STATUS_SUCCESS;
-          this.reset()
-        })
-        .catch(err => {
-          this.uploadError = err.response;
-          this.currentStatus = STATUS_FAILED;
-        });
+
+      try {
+        const response = await axios.post(url, formData);
+        this.result = await response.data;
+        this.uploadedUrl = this.result.photo_url; 
+        let arr = this.uploadedUrl.split("/");
+        // let xform = "e_improve,w_300,h_400,c_scale,g_auto";
+        let xform = "c_thumb,w_200,g_face"
+
+        arr.splice(6, 0, xform);
+        this.uploadedUrl = arr.join("/");    
+        this.currentStatus = STATUS_SUCCESS;
+        this.reset();
+      } catch (err) {
+        console.log(err)
+        this.uploadError = err.response;
+        this.currentStatus = STATUS_FAILED;
+      }
+
+ 
+
+      // axios
+      //   .post(url, formData)
+      //   .then(response => {
+      //     this.result = response.data;
+      //     let arr = this.result.photo_url.split("/");
+      //     let xform = "e_improve,w_300,h_400,c_scale,g_auto";
+      //     arr.splice(6, 0, xform);
+      //     this.uploadedUrl = arr.join("/");
+      //     this.currentStatus = STATUS_SUCCESS;
+      //     this.reset();
+      //   })
+      //   .catch(err => {
+      //     this.uploadError = err.response;
+      //     this.currentStatus = STATUS_FAILED;
+      //   });
       // );
     },
     filesChange(fieldName, fileList) {
