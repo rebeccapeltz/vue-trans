@@ -1,5 +1,6 @@
 //import the require modules 
 require('dotenv').config()
+var fs = require('fs');
 
 if (typeof (process.env.CLOUDINARY_URL) === 'undefined') {
   console.warn('!! cloudinary config is undefined !!');
@@ -63,8 +64,13 @@ app.post('/api/upload/single', upload.single('singleFile'), (req, res, next) => 
       })
       .then(function (photo) {
         //delete from file system
+        fs.unlink(file.path, function (err) {
+          if (!err) {
+            console.log('file deleted');
+          }
+        })
         res.status(200).json({
-          "photo_url":photo.secure_url,
+          "photo_url": photo.secure_url,
           "status": "success",
           "code": "200",
           "message": "file uploaded successfully"
