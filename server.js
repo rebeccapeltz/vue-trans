@@ -1,6 +1,7 @@
 //import the require modules 
 require('dotenv').config()
 var fs = require('fs');
+let port = process.env.PORT || 5000;
 
 if (typeof (process.env.CLOUDINARY_URL) === 'undefined') {
   console.warn('!! cloudinary config is undefined !!');
@@ -94,6 +95,6 @@ app.post('/api/upload/single', upload.single('singleFile'), (req, res, next) => 
     });
   }
 });
-app.listen(5010, function () {
-  console.log("server is running on port 5010");
+app.listen(port, function () {
+  console.log(`server is running on port ${port}`);
 });
