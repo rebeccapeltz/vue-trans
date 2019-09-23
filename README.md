@@ -1,4 +1,5 @@
 # vue-trans
+Vue.js app with node backend, deployed on heroku
 
 ## Project setup
 ```
@@ -28,6 +29,14 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-https://medium.com/netscape/deploying-a-vue-js-2-x-app-to-heroku-in-5-steps-tutorial-a69845ace489
+[Using heroku to server](https://medium.com/netscape/deploying-a-vue-js-2-x-app-to-heroku-in-5-steps-tutorial-a69845ace489)
 
+```
+git push heroku master
+heroku open
+```
+
+### Node debugging in VS Code
+```
 debug node --inspect-brk server
+```
