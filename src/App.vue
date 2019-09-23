@@ -1,24 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <UploadForm/>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <router-link to="/">Home</router-link>
+    <router-link to="/upload">Upload</router-link>
+    <!-- <UploadForm/> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import UploadForm from './components/UploadForm.vue'
+
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    UploadForm
+    
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */

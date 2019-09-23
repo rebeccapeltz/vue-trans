@@ -54,6 +54,7 @@ app.post('/api/upload/single', upload.single('singleFile'), (req, res, next) => 
         "message": "Please upload file"
       });
     }
+   
     // upload to cloudinary
     cloudinary.uploader.upload(file.path, {
         tags: 'vue_trans'
