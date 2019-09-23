@@ -1,5 +1,12 @@
 # vue-trans
-Vue.js app with node backend, deployed on heroku
+Vue.js app with node backend, deployed on heroku  
+User can upload a file to Cloudinary and it gets tagged with "vue-trans"  
+Code uses multer to upload file to local server file system and then the file is delete once successfully upload to Cloudinary. 
+
+...Look at just buffering the file?
+
+# Demo
+[vue-trans](https://vue-trans.herokuapp.com)
 
 ## Project setup
 ```
