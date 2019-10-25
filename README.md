@@ -45,5 +45,5 @@ heroku open
 
 ### Node debugging in VS Code
 ```
-debug node --inspect-brk server
+node --inspect-brk server
 ```

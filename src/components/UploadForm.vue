@@ -88,7 +88,7 @@ export default {
         this.currentStatus = STATUS_SUCCESS;
         this.reset();
       } catch (err) {
-        console.log(err)
+        console.log(err);
         this.uploadError = err.response;
         this.currentStatus = STATUS_FAILED;
       }

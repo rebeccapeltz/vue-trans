@@ -1,3 +1,4 @@
+const VUE_TRANS_TAG = "vue_trans"
 //import the require modules 
 require('dotenv').config()
 var fs = require('fs');
@@ -43,6 +44,38 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+// tag search
+app.get('/api/vue_trans_tag', (req, res, next) => {
+  try {
+    cloudinary.search
+      .expression(`tags=${VUE_TRANS_TAG}`)
+      .sort_by('public_id', 'desc')
+      .max_results(30)
+      .execute().then(result => {
+        // console.log(result)
+        let urlCollection = result.resources.map(item=>{
+          return item.secure_url
+        })
+        // console.log(urlCollection)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.status(200).json({
+          "collection": urlCollection,
+          "status": "success",
+          "code": "200",
+          "message": "search successful"
+        })
+      });
+  } catch (err) {
+    console.log(err)
+    res.status(404).json({
+      "status": "failed",
+      "code": "404",
+      "message": "No files found"
+    });
+  }
+})
+
+
 //single file upload api 
 app.post('/api/upload/single', upload.single('singleFile'), (req, res, next) => {
   try {
@@ -55,10 +88,10 @@ app.post('/api/upload/single', upload.single('singleFile'), (req, res, next) => 
         "message": "Please upload file"
       });
     }
-   
+
     // upload to cloudinary
     cloudinary.uploader.upload(file.path, {
-        tags: 'vue_trans'
+        tags: VUE_TRANS_TAG
       })
       .then(function (photo) {
         console.log('** file saved');
